@@ -1,8 +1,8 @@
 apiVersion: v2
 name: wg-easy
 description: Wireguard Easy helm chart for Kubernetes
-home: https://github.com/hansehe/wg-easy
-icon: https://raw.githubusercontent.com/hansehe/wg-easy/master/helm/wireguard.png
+home: https://github.com/hansehe/wg-easy-helm
+icon: https://raw.githubusercontent.com/hansehe/wg-easy-helm/master/helm/wireguard.png
 keywords:
 - wireguard
 - wg-easy
@@ -10,7 +10,7 @@ maintainers:
 - email: hans.erik.heggem@gmail.com
   name: hansehe
 sources:
-- https://github.com/hansehe/wg-easy
+- https://github.com/hansehe/wg-easy-helm
 
 # A chart can be either an 'application' or a 'library' chart.
 #

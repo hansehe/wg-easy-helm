@@ -15,7 +15,7 @@ Access WireGuard Easy at:
 
 ## Use Helm Repo
 ```bash
-helm repo add wg-easy https://raw.githubusercontent.com/hansehe/wg-easy/master/helm/charts
+helm repo add wg-easy https://raw.githubusercontent.com/hansehe/wg-easy-helm/master/helm/charts
 helm repo update
 ```
 ```bash

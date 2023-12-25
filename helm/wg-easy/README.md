@@ -10,7 +10,7 @@ The WireGuard Easy deploys a vpn solution, check out:
 To install the chart with the release name `wg-easy` run:
 
 ```bash
-$ helm repo add wg-easy https://raw.githubusercontent.com/hansehe/wg-easy/master/helm/charts
+$ helm repo add wg-easy https://raw.githubusercontent.com/hansehe/wg-easy-helm/master/helm/charts
 $ helm install wg-easy wg-easy/wg-easy
 ```
 
@@ -23,4 +23,4 @@ $ helm install wg-easy -f values.yaml wg-easy/wg-easy
 ## Configuration
 
 Find all possible configuration values here:
-- https://github.com/hansehe/wg-easy/blob/master/helm/wg-easy/values.yaml
+- https://github.com/hansehe/wg-easy-helm/blob/master/helm/wg-easy/values.yaml
