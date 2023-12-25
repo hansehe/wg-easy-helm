@@ -1,0 +1,30 @@
+version: '3.8'
+
+# https://github.com/wg-easy/wg-easy
+services:
+  wg-easy:
+    image: ghcr.io/wg-easy/wg-easy:9
+    hostname: wg-easy
+    ports:
+      - 51820:51820/udp # VPN port
+      - 8282:51821/tcp # UI port - access at http://localhost:8282
+    environment:
+      - WG_HOST=localhost # WAN IP, or a Dynamic DNS hostname.
+      - PASSWORD=password # Password for the UI.
+    volumes:
+      - wg_easy_data:/etc/wireguard
+    networks:
+      - backend_network
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+
+volumes:
+  wg_easy_data:
+
+networks:
+  backend_network:

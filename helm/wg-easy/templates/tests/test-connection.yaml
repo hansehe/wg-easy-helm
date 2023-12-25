@@ -1,0 +1,17 @@
+{{- if .Values.tests.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "wg-easy.fullname" . }}-test-connection"
+  labels:
+{{ include "wg-easy.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "wg-easy.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
+{{- end }}
