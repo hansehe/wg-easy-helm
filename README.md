@@ -11,7 +11,8 @@ docker-compose -f docker-compose.yml up
 ```
 
 Access WireGuard Easy at: 
-- http://localhost:51821/
+- http://localhost:8282/
+- Password (see docker-compose.yml) => password
 
 ## Use Helm Repo
 ```bash
