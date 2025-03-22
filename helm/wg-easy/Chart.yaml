@@ -4,13 +4,13 @@ description: Wireguard Easy helm chart for Kubernetes
 home: https://github.com/hansehe/wg-easy-helm
 icon: https://raw.githubusercontent.com/hansehe/wg-easy-helm/master/helm/wireguard.png
 keywords:
-- wireguard
-- wg-easy
+  - wireguard
+  - wg-easy
 maintainers:
-- email: hans.erik.heggem@gmail.com
-  name: hansehe
+  - email: hans.erik.heggem@gmail.com
+    name: hansehe
 sources:
-- https://github.com/hansehe/wg-easy-helm
+  - https://github.com/hansehe/wg-easy-helm
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -24,7 +24,7 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.1.0
+version: 0.1.1
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
