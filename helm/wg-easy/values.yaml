@@ -16,14 +16,25 @@ nameOverride: ""
 fullnameOverride: ""
 terminationGracePeriodSeconds: 10
 environmentVariables:
-  WG_HOST: localhost # WAN IP, or a Dynamic DNS hostname.
-  PASSWORD: password # Password for the UI.
+  # WAN IP or a Dynamic DNS hostname.
+  WG_HOST: localhost
+  # Password for the UI.
+  PASSWORD: password
 
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
+  name:
+
+secret:
+  # Create a secret to store the environment variables. Disabling this
+  # and setting a secret name allows users to bring their own secret
+  # via the external-secrets-operator or similar. 
+  create: true
+  # The name of the secret to use.
+  # If not set and create is true, a name is generated using the fullname template.
   name:
 
 podAnnotations: {}
