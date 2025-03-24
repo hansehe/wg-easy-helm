@@ -64,6 +64,12 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+          {{- if not .Values.secret.create }}
+          {{- range $key, $value := .Values.environmentVariables }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
           {{- if .Values.enableHttpOpenTelemetryCollector }}
           - name: COLLECTOR_OTLP_ENABLED
             value: "true"
@@ -72,6 +78,7 @@ spec:
           - name: COLLECTOR_ZIPKIN_HOST_PORT
             value: ":9411"
           {{- end }}
+          {{- if .Values.secret.create }}
           envFrom:
             - secretRef:
                 {{- if .Values.secret.name }}
@@ -79,6 +86,7 @@ spec:
                 {{- else }}
                 name: {{ include "wg-easy.fullname" . }}
                 {{- end }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

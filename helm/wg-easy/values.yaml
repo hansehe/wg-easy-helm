@@ -32,7 +32,7 @@ secret:
   # Create a secret to store the environment variables. Disabling this
   # and setting a secret name allows users to bring their own secret
   # via the external-secrets-operator or similar. 
-  create: true
+  create: false
   # The name of the secret to use.
   # If not set and create is true, a name is generated using the fullname template.
   name:
