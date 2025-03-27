@@ -64,7 +64,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          {{- if not .Values.secret.create }}
+          {{ $useSecret := or .Values.secret.create (ne .Values.secret.name "") }}
+          {{- if not $useSecret }}
           {{- range $key, $value := .Values.environmentVariables }}
           - name: {{ $key }}
             value: {{ $value | quote }}
@@ -73,12 +74,12 @@ spec:
           {{- if .Values.enableHttpOpenTelemetryCollector }}
           - name: COLLECTOR_OTLP_ENABLED
             value: "true"
-          {{- end }}  
+          {{- end }}
           {{- if .Values.enableHttpZipkinCollector }}
           - name: COLLECTOR_ZIPKIN_HOST_PORT
             value: ":9411"
           {{- end }}
-          {{- if .Values.secret.create }}
+          {{- if $useSecret }}
           envFrom:
             - secretRef:
                 {{- if .Values.secret.name }}
