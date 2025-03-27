@@ -64,7 +64,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          {{ $useSecret := or .Values.secret.create (ne .Values.secret.name "") }}
+          {{ $useSecret := or .Values.secret.create .Values.secret.name }}
           {{- if not $useSecret }}
           {{- range $key, $value := .Values.environmentVariables }}
           - name: {{ $key }}
