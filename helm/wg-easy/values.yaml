@@ -10,6 +10,18 @@ image:
   pullPolicy: IfNotPresent
   versionOverride: "*"
 
+# This will enable IP forwarding and NAT masquerading
+# This is required for the VPN to work in full tunnel mode
+# command:
+#   - /bin/sh
+#   - -c
+#   - |
+#     echo "Enabling IP forwarding"
+#     sysctl -w net.ipv4.ip_forward=1
+#     iptables -t nat -F POSTROUTING
+#     iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+#     exec node server.js
+
 healthCheckUrl: /
 imagePullSecrets: []
 nameOverride: ""
@@ -43,6 +55,8 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext:
+  privileged: true
+  allowPrivilegeEscalation: true
   capabilities:
     add:
       - NET_ADMIN
