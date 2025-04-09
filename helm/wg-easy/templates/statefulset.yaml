@@ -67,8 +67,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-          {{- $useSecret := or .Values.secret.create .Values.secret.name }}
-          {{- if not $useSecret }}
+          {{- if not .Values.secret.create }}
           {{- range $key, $value := .Values.environmentVariables }}
           - name: {{ $key }}
             value: {{ $value | quote }}
@@ -82,7 +81,7 @@ spec:
           - name: COLLECTOR_ZIPKIN_HOST_PORT
             value: ":9411"
           {{- end }}
-          {{- if $useSecret }}
+          {{- if .Values.secret.create }}
           envFrom:
             - secretRef:
                 {{- if .Values.secret.name }}
