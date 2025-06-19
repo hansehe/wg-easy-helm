@@ -10,7 +10,9 @@ services:
       - 8282:51821/tcp # UI port - access at http://localhost:8282
     environment:
       - WG_HOST=localhost # WAN IP, or a Dynamic DNS hostname.
-      - PASSWORD=password # Password for the UI.
+      # Password for the UI see https://github.com/wg-easy/wg-easy/blob/v14/How_to_generate_an_bcrypt_hash.md. 
+      - PASSWORD_HASH=$$2a$$12$$hoLNhJEvcKztEtSO.lfhtuRX4J.7sGdyJXwmweQ0FfiOVhWZfhUSK # docker run -it ghcr.io/wg-easy/wg-easy wgpw password
+      # - PASSWORD=password # Password for the UI.
     volumes:
       - wg_easy_data:/etc/wireguard
     networks:

@@ -30,8 +30,8 @@ terminationGracePeriodSeconds: 10
 environmentVariables:
   # WAN IP or a Dynamic DNS hostname.
   WG_HOST: localhost
-  # Password for the UI.
-  PASSWORD: password
+  # Password for the UI (default: password), see https://github.com/wg-easy/wg-easy/blob/v14/How_to_generate_an_bcrypt_hash.md. 
+  PASSWORD_HASH: $2a$12$hoLNhJEvcKztEtSO.lfhtuRX4J.7sGdyJXwmweQ0FfiOVhWZfhUSK
 
 serviceAccount:
   # Specifies whether a service account should be created
