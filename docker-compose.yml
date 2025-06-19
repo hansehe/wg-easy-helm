@@ -3,7 +3,7 @@ version: '3.8'
 # https://github.com/wg-easy/wg-easy
 services:
   wg-easy:
-    image: ghcr.io/wg-easy/wg-easy:9
+    image: ghcr.io/wg-easy/wg-easy:14
     hostname: wg-easy
     ports:
       - 51820:51820/udp # VPN port
