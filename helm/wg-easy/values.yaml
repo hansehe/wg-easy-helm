@@ -8,19 +8,19 @@ replicaCount: 1
 image:
   repository: ghcr.io/wg-easy/wg-easy
   pullPolicy: IfNotPresent
-  versionOverride: "*"
+  versionOverride: "14"
 
 # This will enable IP forwarding and NAT masquerading
 # This is required for the VPN to work in full tunnel mode
-# command:
-#   - /bin/sh
-#   - -c
-#   - |
-#     echo "Enabling IP forwarding"
-#     sysctl -w net.ipv4.ip_forward=1
-#     iptables -t nat -F POSTROUTING
-#     iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
-#     exec node server.js
+command:
+  - /bin/sh
+  - -c
+  - |
+    echo "Enabling IP forwarding"
+    sysctl -w net.ipv4.ip_forward=1
+    iptables -t nat -F POSTROUTING
+    iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+    exec node server.js
 
 healthCheckUrl: /
 imagePullSecrets: []
@@ -29,9 +29,10 @@ fullnameOverride: ""
 terminationGracePeriodSeconds: 10
 environmentVariables:
   # WAN IP or a Dynamic DNS hostname.
-  WG_HOST: localhost
-  # Password for the UI. docker run -it ghcr.io/wg-easy/wg-easy wgpw
-  PASSWORD_HASH: password_hash
+  WG_HOST: ""
+  WG_DEFAULT_DNS: ""
+  # Password for the UI.
+  PASSWORD_HASH: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -69,7 +70,7 @@ securityContext:
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 51821
   annotations:
     prometheus.io/probe: "true"
@@ -77,16 +78,21 @@ service:
   headless:
     annotations: {}
 
+serviceUdp:
+  enabled: true
+  port: 51820
+  targetPort: 51820
+
 ingress:
-  enabled: false
+  enabled: true
   className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    # nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
   hosts:
-    - host: wg-easy.local
+    - host: wg.fundedtrading.plus
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -96,27 +102,17 @@ ingress:
   #      - wg-easy.local
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
 
-nodeSelector: {}
 
-tolerations: []
+nodeSelector:
 
+tolerations:
+    
 affinity: {}
 
 volume:
   enabled: true
   className: ""
-  size: 256m
   annotations:
     helm.sh/resource-policy: "keep"
 

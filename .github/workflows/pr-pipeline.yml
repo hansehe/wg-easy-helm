@@ -1,0 +1,81 @@
+name: Deploy WG-Easy Chart
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - closed
+      - synchronize
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: 'https://wg-pr-${{ github.event.pull_request.number }}.fundedtrading.plus/'
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+
+    steps:
+      - name: Check Target Branch
+        id: check_branch
+        run: |
+          if [[ "${{ github.head_ref }}" =~  ^(features|dependabot)/ ]]; then
+            echo "match=true" >> $GITHUB_ENV
+          else
+            echo "match=false" >> $GITHUB_ENV
+          fi
+
+      - name: Checkout code
+        if: env.match == 'true'
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        if: env.match == 'true'
+        uses: azure/k8s-set-context@v4
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: Deploy WG-Easy to Kubernetes
+        if: env.match == 'true'
+        run: |
+          NAMESPACE="pr-${{ github.event.pull_request.number }}-wg-easy"
+
+          helm upgrade $NAMESPACE ./helm/wg-easy/ \
+          --install \
+          --namespace $NAMESPACE \
+          --create-namespace \
+          --set-string environmentVariables.WG_HOST="${{ secrets.WG_HOST }}" \
+          --set-string environmentVariables.WG_DEFAULT_DNS="${{ vars.WG_DEFAULT_DNS }}" \
+          --set-string environmentVariables.PASSWORD_HASH="${{ secrets.PASSWORD_HASH }}" \
+          --set-string ingress.hosts[0].host="wg-pr-${{ github.event.pull_request.number }}.fundedtrading.plus" \
+          --set-string ingress.enabled=true \
+          --set-string service.type=ClusterIP
+
+        working-directory: ./
+
+  teardown:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    if: ${{ github.event.action == 'closed' }}
+    steps:
+      - name: Check Target Branch
+        id: check_branch
+        run: |
+          if [[ "${{ github.head_ref }}" =~  ^(features|dependabot)/ ]]; then
+            echo "match=true" >> $GITHUB_ENV
+          else
+            echo "match=false" >> $GITHUB_ENV
+          fi
+
+      - name: Set up kubectl
+        if: env.match == 'true'
+        uses: azure/k8s-set-context@v4
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: Destroy Test Environment
+        if: env.match == 'true'
+        run: |
+          kubectl delete namespace pr-${{ github.event.pull_request.number }}-wg-easy
+        working-directory: ./
