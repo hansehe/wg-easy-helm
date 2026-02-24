@@ -70,6 +70,7 @@ securityContext:
 
 service:
   type: ClusterIP
+  externalTrafficPolicy: Cluster
   port: 51821
   annotations:
     prometheus.io/probe: "true"
