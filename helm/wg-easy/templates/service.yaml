@@ -12,7 +12,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.service.type }}
-  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | default "Cluster" }}
+  {{- if .Values.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     - port: 51820
       targetPort: udp-vpn
