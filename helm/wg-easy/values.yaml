@@ -20,18 +20,21 @@ image:
 #     sysctl -w net.ipv4.ip_forward=1
 #     iptables -t nat -F POSTROUTING
 #     iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
-#     exec node server.js
+#     # then start wg-easy
 
 healthCheckUrl: /
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 terminationGracePeriodSeconds: 10
+# INIT_* only applies on first start.
 environmentVariables:
-  # WAN IP or a Dynamic DNS hostname.
-  WG_HOST: localhost
-  # Password for the UI (default: password), see https://github.com/wg-easy/wg-easy/blob/v14/How_to_generate_an_bcrypt_hash.md. 
-  PASSWORD_HASH: $2a$12$hoLNhJEvcKztEtSO.lfhtuRX4J.7sGdyJXwmweQ0FfiOVhWZfhUSK
+  INSECURE: "true"
+  INIT_ENABLED: "true"
+  INIT_USERNAME: admin
+  INIT_PASSWORD: password
+  INIT_HOST: localhost
+  INIT_PORT: "51820"
 
 serviceAccount:
   # Specifies whether a service account should be created

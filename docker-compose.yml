@@ -1,6 +1,7 @@
 version: '3.8'
 
 # https://github.com/wg-easy/wg-easy
+# v15: https://wg-easy.github.io/wg-easy/latest/getting-started/
 services:
   wg-easy:
     image: ghcr.io/wg-easy/wg-easy:15
@@ -9,12 +10,15 @@ services:
       - 51820:51820/udp # VPN port
       - 8282:51821/tcp # UI port - access at http://localhost:8282
     environment:
-      - WG_HOST=localhost # WAN IP, or a Dynamic DNS hostname.
-      # Password for the UI see https://github.com/wg-easy/wg-easy/blob/v14/How_to_generate_an_bcrypt_hash.md. 
-      - PASSWORD_HASH=$$2a$$12$$hoLNhJEvcKztEtSO.lfhtuRX4J.7sGdyJXwmweQ0FfiOVhWZfhUSK # docker run -it ghcr.io/wg-easy/wg-easy wgpw password
-      # - PASSWORD=password # Password for the UI.
+      - INSECURE=true
+      - INIT_ENABLED=true
+      - INIT_USERNAME=admin
+      - INIT_PASSWORD=password
+      - INIT_HOST=localhost
+      - INIT_PORT=51820
     volumes:
       - wg_easy_data:/etc/wireguard
+      - /lib/modules:/lib/modules:ro
     networks:
       - backend_network
     restart: unless-stopped

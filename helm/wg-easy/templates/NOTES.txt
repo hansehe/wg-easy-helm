@@ -1,4 +1,9 @@
 {{- if .Values.enabled }}
+Default UI login: {{ .Values.environmentVariables.INIT_USERNAME | default "admin" }} / (see values INIT_PASSWORD)
+{{- if index .Values.environmentVariables "INIT_HOST" }}
+VPN endpoint host (INIT_HOST): {{ index .Values.environmentVariables "INIT_HOST" }}
+{{- end }}
+
 1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
 {{- range $host := .Values.ingress.hosts }}
